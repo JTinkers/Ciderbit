@@ -14,6 +14,14 @@ namespace Ciderbit.Libraries
         private static TcpListener listener;
         private static List<TcpClient> clients = new List<TcpClient>();
 
+        public static event EventHandler ClientConnected;
+        public static event EventHandler<DataReceivedEventArgs> DataReceived;
+
+        public class DataReceivedEventArgs : EventArgs
+        {
+            public byte[] Data;
+        }
+
         public static void Open()
         {
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 3560);
@@ -29,7 +37,7 @@ namespace Ciderbit.Libraries
 
                     clients.Add(listener.AcceptTcpClient());
 
-                    Console.WriteLine("#\tListener: client connected.");
+                    ClientConnected(null, EventArgs.Empty);
                 }
             });
 
@@ -47,7 +55,7 @@ namespace Ciderbit.Libraries
 
                             stream.Read(buffer, 0, buffer.Length);
 
-                            Console.WriteLine($"#\tListener: data received: {Encoding.Default.GetString(buffer).Trim()}");
+                            DataReceived(null, new DataReceivedEventArgs { Data = buffer });
                         }
                     }
                 }

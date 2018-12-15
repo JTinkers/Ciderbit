@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Component.cs" />
     <Compile Include="Libraries\Conduit.cs" />
+    <Compile Include="Libraries\Scripter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
