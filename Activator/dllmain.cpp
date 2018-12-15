@@ -9,6 +9,7 @@
 using namespace System;
 using namespace System::Reflection;
 using namespace Ciderbit;
+using namespace Ciderbit::Libraries;
 
 DWORD WINAPI MainThread(LPVOID param)
 {

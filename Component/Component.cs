@@ -1,4 +1,5 @@
 ﻿using System;
+using Ciderbit.Libraries;
 
 namespace Ciderbit
 {
@@ -7,7 +8,9 @@ namespace Ciderbit
         public static void Initialize()
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("Component initialized.");
+            Console.WriteLine("#\tComponent: initialized.");
+
+            Conduit.Open();
         }
     }
 }
