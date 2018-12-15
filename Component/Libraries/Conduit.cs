@@ -11,6 +11,8 @@ namespace Ciderbit.Libraries
 {
     public static class Conduit
     {
+        private static int bufferSize = 512;
+
         private static TcpListener listener;
         private static List<TcpClient> clients = new List<TcpClient>();
 
@@ -46,16 +48,27 @@ namespace Ciderbit.Libraries
             {
                 while(true)
                 {
+                    var data = new List<byte>();
+                    var buffer = new byte[bufferSize];
+
                     foreach(var client in clients)
                     {
-                        if(client.Connected)
+                        data.Clear();
+                        if (client.Connected)
                         {
-                            var buffer = new byte[1028];
                             var stream = client.GetStream();
 
-                            stream.Read(buffer, 0, buffer.Length);
+                            while(client.Available > 0)
+                            {
+                                buffer = new byte[Math.Min(bufferSize, client.Available)];
 
-                            DataReceived(null, new DataReceivedEventArgs { Data = buffer });
+                                stream.Read(buffer, 0, Math.Min(buffer.Length, client.Available));
+
+                                data.AddRange(buffer);
+                            }
+
+                            if (data.Count > 0)
+                                DataReceived(null, new DataReceivedEventArgs { Data = data.ToArray() });
                         }
                     }
                 }

@@ -1,2 +1,2 @@
 # Ciderbit
-Scriptable debugger; utilizes cross-component communication to allow for debugging at runtime.
+Scriptable CLR injector that can serve as an initializer for debuggers, mods and bots written in C#.

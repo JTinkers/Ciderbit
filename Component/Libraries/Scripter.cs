@@ -12,6 +12,13 @@ namespace Ciderbit.Libraries
     {
         private static CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
 
+        public static event EventHandler<CompilationFailedEventArgs> CompilationFailed;
+
+        public class CompilationFailedEventArgs : EventArgs
+        {
+            public CompilerErrorCollection Errors;
+        }
+
         public static Assembly Compile(string code)
         {
             var parameters = new CompilerParameters();
@@ -23,8 +30,7 @@ namespace Ciderbit.Libraries
 
             if (result.Errors.HasErrors)
             {
-                foreach (CompilerError error in result.Errors)
-                    Console.WriteLine($"Column {error.Column} : Line{error.Line} - {error.ErrorText}");
+                CompilationFailed(null, new CompilationFailedEventArgs { Errors = result.Errors });
 
                 return null;
             }
