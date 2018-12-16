@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Ciderbit.Types;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -15,21 +17,37 @@ namespace Ciderbit.Libraries
 
         private static TcpListener listener;
         private static List<TcpClient> clients = new List<TcpClient>();
+        private static TcpClient client;
 
         public static event EventHandler ClientConnected;
         public static event EventHandler<DataReceivedEventArgs> DataReceived;
 
         public class DataReceivedEventArgs : EventArgs
         {
-            public byte[] Data;
+            public Payload Payload;
+        }
+
+        public static void Connect() => client = new TcpClient("127.0.0.1", 1964);
+
+        public static void Send(Payload payload)
+        {
+            var data = Encoding.Default.GetBytes(payload.Serialize()).ToList();
+            var stream = client.GetStream();
+
+            for (int i = 0; i < data.Count; i += bufferSize)
+            {
+                var chunk = data.GetRange(i, Math.Min(bufferSize, data.Count - i)).ToArray();
+
+                stream.Write(chunk, 0, chunk.Length);
+            }
         }
 
         public static void Open()
         {
-            listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 3560);
+            listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 1964);
             listener.Start();
 
-            //Await clients
+            //Accept pending connection requests
             Task.Run(() =>
             {
                 while(true)
@@ -40,12 +58,10 @@ namespace Ciderbit.Libraries
                     clients.Add(listener.AcceptTcpClient());
 
                     ClientConnected(null, EventArgs.Empty);
-
-                    Console.WriteLine($"Clients: {clients.Count} - remove this later");
                 }
             });
 
-            //Read stream
+            //Read stream from connected clients
             Task.Run(() =>
             {
                 while(true)
@@ -60,7 +76,7 @@ namespace Ciderbit.Libraries
                         {
                             var stream = client.GetStream();
 
-                            while(client.Available > 0)
+                            while (client.Available > 0)
                             {
                                 buffer = new byte[Math.Min(bufferSize, client.Available)];
 
@@ -70,8 +86,10 @@ namespace Ciderbit.Libraries
                             }
 
                             if (data.Count > 0)
-                                DataReceived(null, new DataReceivedEventArgs { Data = data.ToArray() });
+                                DataReceived(null, new DataReceivedEventArgs { Payload = Payload.Deserialize(data.ToArray()) });
                         }
+                        else
+                            clients.Remove(client);
                     }
                 }
             });

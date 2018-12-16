@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Ciderbit.Libraries;
+using Ciderbit.Types;
 
 namespace Ciderbit
 {
@@ -19,31 +20,48 @@ namespace Ciderbit
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("#\tComponent: initialized.");
 
+            #region behaviour of modules
             Scripter.CompilationFailed += (o, e) =>
             {
                 Console.WriteLine("#\tScripter: compile errors occured:\n");
 
+                Console.ForegroundColor = ConsoleColor.Red;
+
                 foreach (CompilerError error in e.Errors)
                     Console.WriteLine($"\t[Line {error.Line}]:\t{error.ErrorText}");
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
             };
 
-            Conduit.Open();
-
-            Conduit.ClientConnected += (o, e) =>
-            {
-                Console.WriteLine("#\tConduit: client connected.");
-            };
+            Conduit.ClientConnected += (o, e) => Console.WriteLine("#\tConduit: client connected.");
 
             Conduit.DataReceived += (o, e) =>
             {
-                Console.WriteLine($"#\tConduit: script received of size {e.Data.Length} bytes");
+                Console.WriteLine($"#\tConduit: data payload received of size: [{e.Payload.Data.Length} bytes] and type: [{e.Payload.Type}].");
 
-                var script = Scripter.Compile(Encoding.Default.GetString(e.Data)).GetType("Ciderbit.Script", true, false);
+                Assembly script = null;
 
-                var method = script.GetMethod("Start", BindingFlags.Public | BindingFlags.Static);
+                if (e.Payload.Type == PayloadType.Code)
+                {
+                    Console.WriteLine($"#\tComponent: code from the payload will now be compiled and executed.");
+
+                    script = Scripter.Compile(Encoding.Default.GetString(e.Payload.Data));
+                }
+
+                if (e.Payload.Type == PayloadType.Files)
+                {
+                    Console.WriteLine($"#\tComponent: files pointed to by the payload will now be compiled and executed.");
+
+                    script = Scripter.Compile(e.Payload.GetFiles());
+                }
+
+                var method = script.GetType("Ciderbit.Script", true, false).GetMethod("Start", BindingFlags.Public | BindingFlags.Static);
 
                 method.Invoke(null, null);
             };
+            #endregion
+
+            Conduit.Open();
         }
     }
 }

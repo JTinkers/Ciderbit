@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Ciderbit.Libraries;
+using Ciderbit.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,38 +17,13 @@ namespace TcpClientTest
 
         static void Main(string[] args)
         {
-            var client = new TcpClient("127.0.0.1", 3560);
+            var data = @"D:\GitProjects\Ciderbit\Component\bin\Debug\first.txt;D:\GitProjects\Ciderbit\Component\bin\Debug\second.txt";
 
-            while (!client.Connected) { }
+            Conduit.Connect();
 
-            var stream = client.GetStream();
+            Thread.Sleep(500);
 
-            var data = @"using System;
-            using Ciderbit.Libraries;
-            namespace Ciderbit
-            {
-                public static class Script
-                {
-                    public static void Start()
-                    {
-		                Scripter.Wee();
-                    }
-                }
-            }";
-
-            var payload = Encoding.Default.GetBytes(data.ToString()).ToList();
-
-            //Send chunks
-            for(int i = 0; i < payload.Count; i+=bufferSize)
-            {
-                var chunk = payload.GetRange(i, Math.Min(bufferSize, payload.Count - i)).ToArray();
-
-                stream.Write(chunk, 0, chunk.Length);
-            }
-
-            client.Close();
-
-            Console.Beep();
+            Conduit.Send(new Payload(PayloadType.Files, Encoding.Default.GetBytes(data)));
         }
     }
 }
