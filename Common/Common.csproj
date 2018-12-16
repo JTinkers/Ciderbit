@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Libraries\Compiler.cs" />
     <Compile Include="Libraries\Conduit.cs" />
+    <Compile Include="Libraries\Functionizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Payload.cs" />
     <Compile Include="Types\Script.cs" />

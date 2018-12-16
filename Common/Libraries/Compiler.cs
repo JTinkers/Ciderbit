@@ -23,6 +23,11 @@ namespace Ciderbit.Libraries
             public CompilerErrorCollection Errors;
         }
 
+        /// <summary>
+        /// Create a compiled assembly from string of code.
+        /// </summary>
+        /// <param name="code">Code to compile into an assembly.</param>
+        /// <returns>Compiled assembly.</returns>
         public static Assembly Create(string code)
         {
             var parameters = new CompilerParameters();
@@ -44,6 +49,12 @@ namespace Ciderbit.Libraries
             return result.CompiledAssembly;
         }
 
+        /// <summary>
+        /// Create a compiled assembly from files.
+        /// </summary>
+        /// <param name="files">Files to compile into assembly.</param>
+        /// <param name="assemblies">Referenced assemblies to include in the compilation.</param>
+        /// <returns>Compiled assembly.</returns>
         public static Assembly Create(string[] files, string[] assemblies)
         {
             var parameters = new CompilerParameters();
