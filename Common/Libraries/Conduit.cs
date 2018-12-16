@@ -11,9 +11,13 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Libraries
 {
+    /// <summary>
+    /// Class responsible for TCP/IP communication between component and apps.
+    /// </summary>
     public static class Conduit
     {
-        private static int bufferSize = 512;
+        private static int bufferSize = 2048;
+        private static int connectionDelay = 500;
 
         private static TcpListener listener;
         private static List<TcpClient> clients = new List<TcpClient>();
@@ -27,13 +31,26 @@ namespace Ciderbit.Libraries
             public Payload Payload;
         }
 
-        public static void Connect() => client = new TcpClient("127.0.0.1", 1964);
+        /// <summary>
+        /// Connect to the locally-hosted TCP/IP connection.
+        /// </summary>
+        public static void Connect()
+        {
+            client = new TcpClient("127.0.0.1", 1964);
 
+            Thread.Sleep(connectionDelay);
+        }
+
+        /// <summary>
+        /// Send data in a payload form.
+        /// </summary>
+        /// <param name="payload"></param>
         public static void Send(Payload payload)
         {
             var data = Encoding.Default.GetBytes(payload.Serialize()).ToList();
             var stream = client.GetStream();
 
+            //Send in chunks defined by bufferSize
             for (int i = 0; i < data.Count; i += bufferSize)
             {
                 var chunk = data.GetRange(i, Math.Min(bufferSize, data.Count - i)).ToArray();
@@ -42,6 +59,9 @@ namespace Ciderbit.Libraries
             }
         }
 
+        /// <summary>
+        /// Open a local server for communication.
+        /// </summary>
         public static void Open()
         {
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 1964);
@@ -95,6 +115,9 @@ namespace Ciderbit.Libraries
             });
         }
 
+        /// <summary>
+        /// Close local server and underlying connections.
+        /// </summary>
         public static void Close()
         {
             clients.ForEach(x => x.Close());

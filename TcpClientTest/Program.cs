@@ -2,6 +2,7 @@
 using Ciderbit.Types;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -13,17 +14,15 @@ namespace TcpClientTest
 {
     class Program
     {
-        private static int bufferSize = 512;
-
         static void Main(string[] args)
         {
-            var data = @"D:\GitProjects\Ciderbit\Component\bin\Debug\first.txt;D:\GitProjects\Ciderbit\Component\bin\Debug\second.txt";
+            var data = @"D:\GitProjects\Ciderbit\Component\bin\Debug\MyScript\first.cs;D:\GitProjects\Ciderbit\Component\bin\Debug\MyScript\second.cs";
 
             Conduit.Connect();
 
-            Thread.Sleep(500);
+            var info = File.ReadAllText(@"D:\GitProjects\Ciderbit\Component\bin\Debug\MyScript\package.info");
 
-            Conduit.Send(new Payload(PayloadType.Files, Encoding.Default.GetBytes(data)));
+            Conduit.Send(new Payload(PayloadType.Files, Encoding.Default.GetBytes(data), info));
         }
     }
 }

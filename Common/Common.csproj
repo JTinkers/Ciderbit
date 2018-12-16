@@ -44,9 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libraries\Compiler.cs" />
     <Compile Include="Libraries\Conduit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Payload.cs" />
+    <Compile Include="Types\Script.cs" />
+    <Compile Include="Types\ScriptInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

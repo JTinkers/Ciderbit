@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ciderbit.Types;
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Libraries
 {
-    public static class Scripter
+    /// <summary>
+    /// Class responsible for creating compiled assemblies
+    /// </summary>
+    public static class Compiler
     {
         private static CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
 
@@ -19,10 +23,12 @@ namespace Ciderbit.Libraries
             public CompilerErrorCollection Errors;
         }
 
-        public static Assembly Compile(string code)
+        public static Assembly Create(string code)
         {
             var parameters = new CompilerParameters();
             parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("CiderbitCommon.dll");
+            parameters.ReferencedAssemblies.Add("CiderbitComponent.dll");
             parameters.GenerateExecutable = false;
             parameters.GenerateInMemory = true;
 
@@ -38,10 +44,10 @@ namespace Ciderbit.Libraries
             return result.CompiledAssembly;
         }
 
-        public static Assembly Compile(string[] files)
+        public static Assembly Create(string[] files, string[] assemblies)
         {
             var parameters = new CompilerParameters();
-            parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.AddRange(assemblies);
             parameters.GenerateExecutable = false;
             parameters.GenerateInMemory = true;
 
