@@ -40,6 +40,8 @@ namespace Ciderbit.Libraries
                     clients.Add(listener.AcceptTcpClient());
 
                     ClientConnected(null, EventArgs.Empty);
+
+                    Console.WriteLine($"Clients: {clients.Count} - remove this later");
                 }
             });
 
@@ -77,6 +79,7 @@ namespace Ciderbit.Libraries
 
         public static void Close()
         {
+            clients.ForEach(x => x.Close());
             listener.Stop();
         }
     }

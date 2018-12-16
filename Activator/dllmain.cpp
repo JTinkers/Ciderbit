@@ -13,10 +13,6 @@ using namespace Ciderbit::Libraries;
 
 DWORD WINAPI MainThread(LPVOID param)
 {
-	AllocConsole();
-
-	Console::WriteLine("#\tActivator has been executed, initializing the component.");
-
 	Component::Initialize();
 
 	FreeLibraryAndExitThread((HMODULE)param, 0);

@@ -14,6 +14,11 @@ namespace Ciderbit.Libraries
 
         public static event EventHandler<CompilationFailedEventArgs> CompilationFailed;
 
+        public static void Wee()
+        {
+            Console.WriteLine("69");
+        }
+
         public class CompilationFailedEventArgs : EventArgs
         {
             public CompilerErrorCollection Errors;
@@ -23,6 +28,7 @@ namespace Ciderbit.Libraries
         {
             var parameters = new CompilerParameters();
             parameters.ReferencedAssemblies.Add("System.dll");
+            parameters.ReferencedAssemblies.Add("CiderbitComponent.dll");
             parameters.GenerateExecutable = false;
             parameters.GenerateInMemory = true;
 

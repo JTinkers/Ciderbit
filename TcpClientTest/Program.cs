@@ -17,15 +17,22 @@ namespace TcpClientTest
         {
             var client = new TcpClient("127.0.0.1", 3560);
 
-            var stream = client.GetStream();
-            
-            var data = new StringBuilder("So save me, before I fall.");
+            while (!client.Connected) { }
 
-            for (int i = 0; i < 200; i++)
+            var stream = client.GetStream();
+
+            var data = @"using System;
+            using Ciderbit.Libraries;
+            namespace Ciderbit
             {
-                data.Append($" {i+1}");
-            }
-            data.Append("End");
+                public static class Script
+                {
+                    public static void Start()
+                    {
+		                Scripter.Wee();
+                    }
+                }
+            }";
 
             var payload = Encoding.Default.GetBytes(data.ToString()).ToList();
 
@@ -37,11 +44,9 @@ namespace TcpClientTest
                 stream.Write(chunk, 0, chunk.Length);
             }
 
-            Console.WriteLine($"Sending: {data}");
+            client.Close();
 
             Console.Beep();
-
-            Console.ReadKey(true);
         }
     }
 }
