@@ -7,7 +7,7 @@ namespace Engine.Libraries.Compiler.Types
 {
 	public class AssemblyCompiledWithErrorsException : Exception
 	{
-		public CompilerErrorCollection Errors;
+		public CompilerErrorCollection Errors { get; set; }
 
 		public AssemblyCompiledWithErrorsException()
 		{

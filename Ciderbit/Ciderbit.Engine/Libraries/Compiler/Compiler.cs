@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using Engine.Libraries.Compiler.Types;
+using System;
 using System.CodeDom.Compiler;
-using System.Text;
+using System.Collections.Generic;
 using System.IO;
-using Engine.Libraries.Compiler.Types;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Engine.Libraries.Compiler
 {
-
 	/// <summary>
 	/// Class with set of functions for compiling C# files and code into assemblies.
 	/// </summary>
@@ -22,7 +23,7 @@ namespace Engine.Libraries.Compiler
 		/// <param name="paths">Paths to get files from.</param>
 		/// <param name="assemblies">Assemblies referenced in code.</param>
 		/// <returns>Compiled assembly.</returns>
-		public static Assembly Create(string[] paths, string[] assemblies)
+		public static Assembly Create(string[] paths, string[] references, string entryPoint = null)
 		{
 			foreach (var path in paths)
 			{
@@ -31,9 +32,11 @@ namespace Engine.Libraries.Compiler
 			}
 
 			var parameters = new CompilerParameters();
-			parameters.ReferencedAssemblies.AddRange(assemblies);
-			parameters.GenerateExecutable = false;
+			parameters.ReferencedAssemblies.AddRange(references);
+			parameters.GenerateExecutable = true;
 			parameters.GenerateInMemory = true;
+			parameters.MainClass = entryPoint;
+			parameters.CompilerOptions = "/optimize";
 
 			var results = codeProvider.CompileAssemblyFromFile(parameters, paths);
 
