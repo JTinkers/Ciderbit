@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Reflection;
-using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 using System.Threading.Tasks;
 using Engine.Libraries.Compiler;
 
@@ -16,13 +15,19 @@ namespace Ciderbit.Engine
 	{
 		static void Main(string[] args)
 		{
-			var assembly = Compiler.Create(new string[] { AppContext.BaseDirectory + @"\Test\TestAssembly.cs" }, 
-				new string[] { "System.dll" }, "TestAssembly.TestEntryPoint");
+			var files = new string[] { AppContext.BaseDirectory + @"\Test\TestAssembly.cs" };
+			var references = new string[] { AppContext.BaseDirectory + @"\Test\TestReferenceLib.dll", "System.dll" };
+			var resources = new string[] { AppContext.BaseDirectory + @"\Test\TestReferenceLib.dll" };
 
-			var ye = assembly.EntryPoint.Invoke(null, BindingFlags.Public | BindingFlags.Static, null, null, CultureInfo.CurrentCulture);
+			var assembly = Compiler.Create(files, references, resources, "TestAssembly.TestEntryPoint");
 
-			Console.WriteLine(ye);
+			//Throw on thread if freezes console
+			var domain = AppDomain.CreateDomain("ScriptDOM");
 
+			domain.ExecuteAssembly(assembly.Location);
+
+			Console.WriteLine("HEH");
+			
 			Console.ReadKey(true);			
 		}
 	}

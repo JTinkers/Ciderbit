@@ -1,12 +1,8 @@
-﻿using Engine.Libraries.Compiler.Types;
-using System;
+﻿using System;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Engine.Libraries.Compiler.Types;
 
 namespace Engine.Libraries.Compiler
 {
@@ -23,7 +19,7 @@ namespace Engine.Libraries.Compiler
 		/// <param name="paths">Paths to get files from.</param>
 		/// <param name="assemblies">Assemblies referenced in code.</param>
 		/// <returns>Compiled assembly.</returns>
-		public static Assembly Create(string[] paths, string[] references, string entryPoint = null)
+		public static Assembly Create(string[] paths, string[] references, string[] resources, string entryPoint = null)
 		{
 			foreach (var path in paths)
 			{
@@ -32,16 +28,18 @@ namespace Engine.Libraries.Compiler
 			}
 
 			var parameters = new CompilerParameters();
-			parameters.ReferencedAssemblies.AddRange(references);
+			parameters.ReferencedAssemblies.AddRange(references); // check if files found
+			parameters.EmbeddedResources.AddRange(resources); // check if files found
 			parameters.GenerateExecutable = true;
-			parameters.GenerateInMemory = true;
-			parameters.MainClass = entryPoint;
+			parameters.GenerateInMemory = false;
+			parameters.IncludeDebugInformation = true;
 			parameters.CompilerOptions = "/optimize";
+			parameters.MainClass = entryPoint;
 
 			var results = codeProvider.CompileAssemblyFromFile(parameters, paths);
 
 			if (results.Errors.HasErrors)
-				throw new AssemblyCompiledWithErrorsException("Assembly compiled with errors", results.Errors);
+				throw new AssemblyCompiledWithErrorsException("Assembly compiled with errors.", results.Errors);
 
 			return results.CompiledAssembly;
 		}
