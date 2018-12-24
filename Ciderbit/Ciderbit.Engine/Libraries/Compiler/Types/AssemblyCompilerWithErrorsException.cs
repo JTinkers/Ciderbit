@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Engine.Libraries.Compiler.Types
 {
+	/// <summary>
+	/// Exception type thrown when assembly compiled with errors.
+	/// </summary>
 	public class AssemblyCompiledWithErrorsException : Exception
 	{
 		public CompilerErrorCollection Errors { get; set; }

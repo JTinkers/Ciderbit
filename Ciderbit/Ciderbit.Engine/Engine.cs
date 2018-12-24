@@ -30,7 +30,7 @@ namespace Ciderbit.Engine
 
 				Conduit.Send(packet);
 
-				Thread.Sleep(1000);
+				Thread.Sleep(2000);
 
 				packet = new ConduitPacket(ConduitPacketType.Terminate, Encoding.Default.GetBytes("PrintSpammerAssembly"));
 

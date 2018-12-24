@@ -12,8 +12,13 @@ using Ciderbit.Common.Libraries.Conduit.Types;
 
 namespace Ciderbit.Component
 {
+	/// <summary>
+	/// Component injected directly into the process. Injects assemblies into the process dynamically.
+	/// </summary>
     public static class Component
     {
+		private static Dictionary<string, AppDomain> runningAssemblies { get; set; } = new Dictionary<string, AppDomain>();
+
 		private enum OutputColor
 		{
 			Default = ConsoleColor.Cyan,
@@ -21,8 +26,9 @@ namespace Ciderbit.Component
 			Print = ConsoleColor.DarkGreen
 		}
 
-		private static Dictionary<string, AppDomain> runningAssemblies { get; set; } = new Dictionary<string, AppDomain>();
-
+		/// <summary>
+		/// Initialize the environment.
+		/// </summary>
 		public static void Initialize()
 		{
 			Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
@@ -31,46 +37,47 @@ namespace Ciderbit.Component
 			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionThrown;
 			AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionThrown;
 
+			Conduit.DataReceived += DataReceived;
 			Conduit.ClientConnected += (o, e) =>
 			{
 				Console.WriteLine("#Conduit:\tClient connected.");
 			};
 
-			Conduit.DataReceived += (o, e) =>
-			{
-				Console.WriteLine($"#Conduit:\tReceived { e.Packet.Data.Length } bytes.");
-
-				string path, name;
-				switch(e.Packet.PacketType)
-				{
-					case ConduitPacketType.Print:
-						Console.WriteLine("#Component:");
-						Console.ForegroundColor = (ConsoleColor)OutputColor.Print;
-						Console.WriteLine("->\t" + Encoding.Default.GetString(e.Packet.Data));
-						Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
-						break;
-					case ConduitPacketType.Execute:
-						path = Encoding.Default.GetString(e.Packet.Data);
-						name = Path.GetFileNameWithoutExtension(path);
-
-						Console.WriteLine($"#Component:\tExecuting assembly [{name}]");
-
-						var domain = AppDomain.CreateDomain(name);
-						domain.ExecuteAssembly(path);
-
-						runningAssemblies.Add(name, domain);
-						break;
-					case ConduitPacketType.Terminate:
-						name = Path.GetFileNameWithoutExtension(Encoding.Default.GetString(e.Packet.Data));
-
-						Console.WriteLine($"#Component:\tAborting running assembly [{name}]");
-
-						AppDomain.Unload(runningAssemblies[name]);
-						break;
-				}
-			};
-
 			Conduit.Open();
+		}
+
+		private static void DataReceived(object sender, DataReceivedEventArgs e)
+		{
+			Console.WriteLine($"#Conduit:\tReceived { e.Packet.Data.Length } bytes.");
+
+			string path, name;
+			switch (e.Packet.PacketType)
+			{
+				case ConduitPacketType.Print:
+					Console.WriteLine("#Component:");
+					Console.ForegroundColor = (ConsoleColor)OutputColor.Print;
+					Console.WriteLine("->\t" + Encoding.Default.GetString(e.Packet.Data));
+					Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
+					break;
+				case ConduitPacketType.Execute:
+					path = Encoding.Default.GetString(e.Packet.Data);
+					name = Path.GetFileNameWithoutExtension(path);
+
+					Console.WriteLine($"#Component:\tExecuting assembly [{name}]");
+
+					var domain = AppDomain.CreateDomain(name);
+					Task.Run(() => domain.ExecuteAssembly(path));
+
+					runningAssemblies.Add(name, domain);
+					break;
+				case ConduitPacketType.Terminate:
+					name = Path.GetFileNameWithoutExtension(Encoding.Default.GetString(e.Packet.Data));
+
+					Console.WriteLine($"#Component:\tAborting running assembly [{name}]");
+
+					AppDomain.Unload(runningAssemblies[name]);
+					break;
+			}
 		}
 
 		private static void FirstChanceExceptionThrown(object sender, FirstChanceExceptionEventArgs e)
