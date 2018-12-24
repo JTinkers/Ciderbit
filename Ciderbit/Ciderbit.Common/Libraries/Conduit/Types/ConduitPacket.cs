@@ -7,8 +7,7 @@ namespace Ciderbit.Common.Libraries.Conduit.Types
 	{
 		Print = 1,
 		Execute = 2,
-		Suspend = 3,
-		Terminate = 4
+		Terminate = 3
 	}
 
 	public class ConduitPacket

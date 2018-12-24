@@ -32,7 +32,7 @@ namespace Engine.Libraries.Compiler
 			}
 
 			var parameters = new CompilerParameters();
-			parameters.OutputAssembly = AppContext.BaseDirectory + @"/Data/Scripts/" + name + ".cider";
+			parameters.OutputAssembly = AppContext.BaseDirectory + @"/Data/Assemblies/" + name + ".cider";
 			parameters.ReferencedAssemblies.AddRange(references);
 			parameters.GenerateExecutable = true;
 			parameters.GenerateInMemory = false;

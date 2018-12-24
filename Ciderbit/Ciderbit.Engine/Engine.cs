@@ -18,7 +18,26 @@ namespace Ciderbit.Engine
 	{
 		static void Main(string[] args)
 		{
-			Console.ReadKey(true);
+			Compiler.Create("PrintSpammerAssembly", 
+				new string[] { @"D:\GitProjects\Ciderbit\Ciderbit\Ciderbit.Engine\Data\Scripts\PrintSpammer.cs" },
+				new string[] { "System.dll" }, 
+				"PrintSpammerNamespace.PrintSpammer");
+
+			if (Conduit.Connect())
+			{
+				var packet = new ConduitPacket(ConduitPacketType.Execute, 
+					Encoding.Default.GetBytes(@"D:\GitProjects\Ciderbit\Ciderbit\Ciderbit.Engine\bin\Debug\Data\Assemblies\PrintSpammerAssembly.cider"));
+
+				Conduit.Send(packet);
+
+				Thread.Sleep(1000);
+
+				packet = new ConduitPacket(ConduitPacketType.Terminate, Encoding.Default.GetBytes("PrintSpammerAssembly"));
+
+				Conduit.Send(packet);
+			}
+
+			Conduit.Disconnect();
 		}
 	}
 }
