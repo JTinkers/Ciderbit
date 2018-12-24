@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Engine.Libraries.Compiler.Types;
@@ -11,15 +13,17 @@ namespace Engine.Libraries.Compiler
 	/// </summary>
 	public static class Compiler
 	{
-		private static CodeDomProvider codeProvider = CodeDomProvider.CreateProvider("CSharp");
+		private static CodeDomProvider codeProvider { get; set; } = CodeDomProvider.CreateProvider("CSharp");
 
 		/// <summary>
 		/// Create a compiled assembly from files specified by their paths.
 		/// </summary>
-		/// <param name="paths">Paths to get files from.</param>
-		/// <param name="assemblies">Assemblies referenced in code.</param>
-		/// <returns>Compiled assembly.</returns>
-		public static Assembly Create(string[] paths, string[] references, string[] resources, string entryPoint = null)
+		/// <param name="name">Name of the assembly.</param>
+		/// <param name="paths">Path of files to compile into an assembly.</param>
+		/// <param name="references">Referenced libraries used by the assembly.</param>
+		/// <param name="entryPoint">Class containing static Main entry point.</param>
+		/// <returns></returns>
+		public static Assembly Create(string name, string[] paths, string[] references, string entryPoint = null)
 		{
 			foreach (var path in paths)
 			{
@@ -28,8 +32,8 @@ namespace Engine.Libraries.Compiler
 			}
 
 			var parameters = new CompilerParameters();
-			parameters.ReferencedAssemblies.AddRange(references); // check if files found
-			parameters.EmbeddedResources.AddRange(resources); // check if files found
+			parameters.OutputAssembly = AppContext.BaseDirectory + @"/Data/Scripts/" + name + ".cider";
+			parameters.ReferencedAssemblies.AddRange(references);
 			parameters.GenerateExecutable = true;
 			parameters.GenerateInMemory = false;
 			parameters.IncludeDebugInformation = true;

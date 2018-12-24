@@ -8,11 +8,11 @@
 
 using namespace System;
 using namespace System::Reflection;
-//using namespace Ciderbit;
+using namespace Ciderbit::Component;
 
 DWORD WINAPI MainThread(LPVOID param)
 {
-	//Component::Initialize();
+	Component::Initialize();
 
 	FreeLibraryAndExitThread((HMODULE)param, 0);
 

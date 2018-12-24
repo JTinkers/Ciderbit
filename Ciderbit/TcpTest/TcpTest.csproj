@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CE05E8F6-CC13-4F08-967F-8CE0C000793D}</ProjectGuid>
+    <ProjectGuid>{45D5CDEF-C56E-4B2C-BB63-9225B19BB05D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Ciderbit.Engine</RootNamespace>
-    <AssemblyName>Ciderbit.Engine</AssemblyName>
+    <RootNamespace>TcpTest</RootNamespace>
+    <AssemblyName>TcpTest</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,13 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.cs" />
-    <Compile Include="Libraries\Compiler\Compiler.cs" />
-    <Compile Include="Libraries\Compiler\Types\AssemblyCompilerWithErrorsException.cs" />
+    <Compile Include="TcpClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Data\Cache\remove.me">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -60,6 +55,5 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

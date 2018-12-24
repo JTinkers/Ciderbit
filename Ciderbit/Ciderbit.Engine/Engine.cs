@@ -2,8 +2,11 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ciderbit.Common.Libraries.Conduit;
+using Ciderbit.Common.Libraries.Conduit.Types;
 using Engine.Libraries.Compiler;
 
 namespace Ciderbit.Engine
@@ -15,20 +18,7 @@ namespace Ciderbit.Engine
 	{
 		static void Main(string[] args)
 		{
-			var files = new string[] { AppContext.BaseDirectory + @"\Test\TestAssembly.cs" };
-			var references = new string[] { AppContext.BaseDirectory + @"\Test\TestReferenceLib.dll", "System.dll" };
-			var resources = new string[] { AppContext.BaseDirectory + @"\Test\TestReferenceLib.dll" };
-
-			var assembly = Compiler.Create(files, references, resources, "TestAssembly.TestEntryPoint");
-
-			//Throw on thread if freezes console
-			var domain = AppDomain.CreateDomain("ScriptDOM");
-
-			domain.ExecuteAssembly(assembly.Location);
-
-			Console.WriteLine("HEH");
-			
-			Console.ReadKey(true);			
+			Console.ReadKey(true);
 		}
 	}
 }
