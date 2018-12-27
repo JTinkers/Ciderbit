@@ -1,4 +1,5 @@
 ﻿{
-  "Namespace": "MyNamespace",
-  "MainClass": "Program"
+  "Name":  "Test Printer",
+  "Namespace": "TestPrinter",
+  "MainClass": "EntryClass"
 }

@@ -34,5 +34,11 @@ namespace Ciderbit.Engine.Libraries.UI
 		{
 			WindowState = WindowState.Minimized;
 		}
+
+		private void WindowBar_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			if (Mouse.LeftButton == MouseButtonState.Pressed)
+				DragMove();
+		}
 	}
 }

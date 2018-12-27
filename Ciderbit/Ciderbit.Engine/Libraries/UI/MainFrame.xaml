@@ -7,11 +7,57 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600" Title="Ciderbit" Width="500" Height="300" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#FFCCB77A">
     <Window.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid SnapsToDevicePixels="true" Width="6">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Rectangle Grid.Row="1" Fill="{TemplateBinding Background}"/>
+                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}" Grid.Row="1">
+                                <Track.Thumb>
+                                    <Thumb/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Thumb">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Rectangle x:Name="rectangle"
+                            SnapsToDevicePixels="True"
+                            Fill="#FFCCB77A"
+                            Height="{TemplateBinding Height}"
+                            Width="{TemplateBinding Width}"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="rectangle" Property="Fill" Value="#FFCCB77A" />
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="true">
+                                <Setter TargetName="rectangle" Property="Fill" Value="#FFCCB77A" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Background" Value="#CCB77A"/>
             <Setter Property="Foreground" Value="#23221E"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
         </Style>
         <Style TargetType="RichTextBox">
             <Setter Property="FontSize" Value="12"/>
@@ -42,7 +88,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Background="#23221E" Margin="1">
+    <Grid Background="#23221E" Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="1"/>
@@ -54,28 +100,42 @@
         <Rectangle Fill="#2D2C28" Grid.Row="1" Stroke="Black" StrokeThickness="0" Margin="10,0"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="180"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
-            <ListBox Margin="10,10,5,10">
-                <ListBoxItem>Test</ListBoxItem>
-                <ListBoxItem>Test2</ListBoxItem>
-                <ListBoxItem>Test3</ListBoxItem>
-            </ListBox>
-            <Grid Grid.Column="1">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <RichTextBox Padding="5" Grid.Row="1" Margin="5,5,10,5" IsReadOnly="True" SelectionBrush="#4CFFFFFF">
+                <RichTextBox Padding="5" Margin="10,10,5,10" IsReadOnly="True" SelectionBrush="#4CFFFFFF">
                     <FlowDocument>
                         <Paragraph>
                             <Run Text=""/>
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
-                <ComboBox Margin="5,10,10,5"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ListBox Margin="5,10,10,5">
+                    <ListBoxItem>Process A</ListBoxItem>
+                    <ListBoxItem>Process B</ListBoxItem>
+                    <ListBoxItem>Process C</ListBoxItem>
+                    <ListBoxItem>Process D</ListBoxItem>
+                    <ListBoxItem>Process E</ListBoxItem>
+                </ListBox>
+                <ListBox Margin="5,5,10,5" Grid.Row="1">
+                    <ListBoxItem>Assembly A</ListBoxItem>
+                    <ListBoxItem>Assembly B</ListBoxItem>
+                    <ListBoxItem>Assembly C</ListBoxItem>
+                    <ListBoxItem>Assembly D</ListBoxItem>
+                    <ListBoxItem>Assembly E</ListBoxItem>
+                </ListBox>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="155*"/>
@@ -86,10 +146,10 @@
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Background="#FFCCB77A">
+        <Grid x:Name="WindowBar" Background="#FFCCB77A" MouseDown="WindowBar_MouseDown">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="133*"/>
-                <ColumnDefinition Width="468*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel FlowDirection="RightToLeft" Orientation="Horizontal" Grid.Column="1" Margin="10,0">
                 <local:TextButton x:Name="ButtonClose" Content="&#xF410;" Padding="2" FontFamily="Font Awesome 5 Free Regular" HorizontalAlignment="Left" FontSize="16" VerticalContentAlignment="Center" Width="30" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" MouseDown="ButtonClose_MouseDown"/>

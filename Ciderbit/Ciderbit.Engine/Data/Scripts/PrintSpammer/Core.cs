@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace PrintSpammerNamespace
+namespace TestPrinter
 {
-	public class PrintSpammer
+	public class EntryClass
 	{
 		public static void Main(string[] args)
 		{
