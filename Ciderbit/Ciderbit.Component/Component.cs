@@ -19,19 +19,12 @@ namespace Ciderbit.Component
     {
 		private static Dictionary<string, AppDomain> runningAssemblies { get; set; } = new Dictionary<string, AppDomain>();
 
-		private enum OutputColor
-		{
-			Default = ConsoleColor.Cyan,
-			Error = ConsoleColor.Red,
-			Print = ConsoleColor.DarkGreen
-		}
-
 		/// <summary>
 		/// Initialize the environment.
 		/// </summary>
 		public static void Initialize()
 		{
-			Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
+			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.WriteLine("#Component:\tInjected.");
 
 			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionThrown;
@@ -55,9 +48,7 @@ namespace Ciderbit.Component
 			{
 				case ConduitPacketType.Print:
 					Console.WriteLine("#Component:");
-					Console.ForegroundColor = (ConsoleColor)OutputColor.Print;
 					Console.WriteLine("->\t" + Encoding.Default.GetString(e.Packet.Data));
-					Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
 					break;
 				case ConduitPacketType.Execute:
 					path = Encoding.Default.GetString(e.Packet.Data);
@@ -66,32 +57,43 @@ namespace Ciderbit.Component
 					Console.WriteLine($"#Component:\tExecuting assembly [{name}]");
 
 					var domain = AppDomain.CreateDomain(name);
+
 					Task.Run(() => domain.ExecuteAssembly(path));
 
-					runningAssemblies.Add(name, domain);
+					runningAssemblies[name] = domain;
 					break;
 				case ConduitPacketType.Terminate:
 					name = Path.GetFileNameWithoutExtension(Encoding.Default.GetString(e.Packet.Data));
 
 					Console.WriteLine($"#Component:\tAborting running assembly [{name}]");
 
-					AppDomain.Unload(runningAssemblies[name]);
+					//if(runningAssemblies.ContainsKey(name))
+						AppDomain.Unload(runningAssemblies[name]);
+
 					break;
 			}
 		}
 
 		private static void FirstChanceExceptionThrown(object sender, FirstChanceExceptionEventArgs e)
 		{
-			Console.ForegroundColor = (ConsoleColor)OutputColor.Error;
-			Console.WriteLine("#Component:\tException: " + e.Exception.Message);
-			Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
+			Console.ForegroundColor = ConsoleColor.Black;
+			Console.BackgroundColor = ConsoleColor.DarkRed;
+			Console.WriteLine("#Component:\tException:\t" + e.Exception.Message);
+			Console.WriteLine("\t\tTargetSite:\t" + e.Exception.TargetSite);
+			Console.WriteLine("\t\tInnerException:\t" + e.Exception.InnerException);
+			Console.WriteLine("\t\tSource:\t" + e.Exception.Source);
+			Console.WriteLine("\t\tStackTrace:\t" + e.Exception.StackTrace);
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.BackgroundColor = ConsoleColor.Black;
 		}
 
 		private static void UnhandledExceptionThrown(object sender, UnhandledExceptionEventArgs e)
 		{
-			Console.ForegroundColor = (ConsoleColor)OutputColor.Error;
+			Console.ForegroundColor = ConsoleColor.Black;
+			Console.BackgroundColor = ConsoleColor.DarkRed;
 			Console.WriteLine("#Component:\tUnhandled exception.");
-			Console.ForegroundColor = (ConsoleColor)OutputColor.Default;
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.BackgroundColor = ConsoleColor.Black;
 		}
 	}
 }

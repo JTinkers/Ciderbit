@@ -1,0 +1,101 @@
+﻿<Window x:Class="Ciderbit.Engine.Libraries.UI.MainFrame"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ciderbit.Engine.Libraries.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600" Title="Ciderbit" Width="500" Height="300" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#FFCCB77A">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#CCB77A"/>
+            <Setter Property="Foreground" Value="#23221E"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style TargetType="RichTextBox">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#1E1D1A"/>
+            <Setter Property="Foreground" Value="#CCB77A"/>
+            <Setter Property="BorderBrush" Value="#282723"/>
+        </Style>
+        <Style TargetType="ListBox">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Background" Value="#1E1D1A"/>
+            <Setter Property="Foreground" Value="#CCB77A"/>
+            <Setter Property="BorderBrush" Value="#282723"/>
+        </Style>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="4"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#E5CE89"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="#E5CE89" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="#23221E" Margin="1">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Fill="#2D2C28" Grid.Row="1" Stroke="Black" StrokeThickness="0" Margin="10,0"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <ListBox Margin="10,10,5,10">
+                <ListBoxItem>Test</ListBoxItem>
+                <ListBoxItem>Test2</ListBoxItem>
+                <ListBoxItem>Test3</ListBoxItem>
+            </ListBox>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <RichTextBox Padding="5" Grid.Row="1" Margin="5,5,10,5" IsReadOnly="True" SelectionBrush="#4CFFFFFF">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <ComboBox Margin="5,10,10,5"/>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="155*"/>
+                        <ColumnDefinition Width="163*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Execute" Margin="5,5,5,10" Padding="4"/>
+                    <Button Content="Terminate" Grid.Column="1" Margin="5,5,10,10" Padding="4"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Background="#FFCCB77A">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="133*"/>
+                <ColumnDefinition Width="468*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel FlowDirection="RightToLeft" Orientation="Horizontal" Grid.Column="1" Margin="10,0">
+                <local:TextButton x:Name="ButtonClose" Content="&#xF410;" Padding="2" FontFamily="Font Awesome 5 Free Regular" HorizontalAlignment="Left" FontSize="16" VerticalContentAlignment="Center" Width="30" Height="30" VerticalAlignment="Top" HorizontalContentAlignment="Center" MouseDown="ButtonClose_MouseDown"/>
+                <local:TextButton x:Name="ButtonMinimalize" Content="&#xF2D1;" Padding="2" FontFamily="Font Awesome 5 Free Regular" HorizontalAlignment="Left" FontSize="16" VerticalContentAlignment="Center" Width="30" Height="30" HorizontalContentAlignment="Center" MouseDown="ButtonMinimalize_MouseDown"/>
+            </StackPanel>
+            <Label Content="Ciderbit" VerticalContentAlignment="Center" Foreground="#FF282723" FontSize="16" Margin="10,0" FontWeight="Medium" HorizontalAlignment="Left"/>
+        </Grid>
+    </Grid>
+</Window>

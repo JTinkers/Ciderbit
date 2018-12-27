@@ -5,8 +5,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using Ciderbit.Common.Libraries.Conduit;
 using Ciderbit.Common.Libraries.Conduit.Types;
+using Ciderbit.Engine.Libraries.UI;
 using Engine.Libraries.Compiler;
 
 namespace Ciderbit.Engine
@@ -16,17 +19,23 @@ namespace Ciderbit.Engine
 	/// </summary>
 	public static class Engine
 	{
+		[STAThread]
 		static void Main(string[] args)
 		{
-			Compiler.Create("PrintSpammerAssembly", 
-				new string[] { @"D:\GitProjects\Ciderbit\Ciderbit\Ciderbit.Engine\Data\Scripts\PrintSpammer.cs" },
-				new string[] { "System.dll" }, 
+			var frame = new MainFrame();
+			frame.ShowDialog();
+
+			/*var scriptPath = @"D:\GitProjects\Ciderbit\Ciderbit\Ciderbit.Engine\Data\Scripts\PrintSpammer\";
+
+			Compiler.Create(scriptPath + "PrintSpammer.cider", 
+				Directory.GetFiles(scriptPath, "*.cs", SearchOption.AllDirectories),
+				Directory.GetFiles(scriptPath, "*.dll", SearchOption.AllDirectories), 
 				"PrintSpammerNamespace.PrintSpammer");
 
 			if (Conduit.Connect())
 			{
 				var packet = new ConduitPacket(ConduitPacketType.Execute, 
-					Encoding.Default.GetBytes(@"D:\GitProjects\Ciderbit\Ciderbit\Ciderbit.Engine\bin\Debug\Data\Assemblies\PrintSpammerAssembly.cider"));
+					Encoding.Default.GetBytes(scriptPath + "PrintSpammer.cider"));
 
 				Conduit.Send(packet);
 
@@ -37,7 +46,7 @@ namespace Ciderbit.Engine
 				Conduit.Send(packet);
 			}
 
-			Conduit.Disconnect();
+			Conduit.Disconnect();*/
 		}
 	}
 }

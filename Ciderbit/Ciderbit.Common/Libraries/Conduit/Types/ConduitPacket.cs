@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Ciderbit.Common.Libraries.Conduit.Types
 {
+	/// <summary>
+	/// Enum describing type of the packet.
+	/// </summary>
 	public enum ConduitPacketType
 	{
 		Print = 1,
