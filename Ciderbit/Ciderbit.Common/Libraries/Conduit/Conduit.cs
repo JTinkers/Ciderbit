@@ -26,7 +26,7 @@ namespace Ciderbit.Common.Libraries.Conduit
 		public static event EventHandler<DataReceivedEventArgs> DataReceived;
 
 		private static int bufferSize { get; set; } = 1024;
-		private static int connectionRetryDelay { get; set; } = 500;
+		private static int connectionRetryDelay { get; set; } = 250;
 		private static int connectionRetryCount { get; set; } = 3;
 
 		private static TcpListener server { get; set; }
@@ -43,7 +43,11 @@ namespace Ciderbit.Common.Libraries.Conduit
 
 			for (int i = 0; i < connectionRetryCount; i++)
 			{
-				client.Connect("127.0.0.1", 1964);
+				try
+				{
+					client.Connect("127.0.0.1", 1964);
+				}
+				catch { }
 
 				Thread.Sleep(connectionRetryDelay);
 

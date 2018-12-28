@@ -37,6 +37,11 @@ namespace Ciderbit.Common.Libraries.Conduit.Types
 			Data = data;
 		}
 
+		public ConduitPacket(ConduitPacketType packetType)
+		{
+			PacketType = packetType;
+		}
+
 		/// <summary>
 		/// Serialize packet into a byte array.
 		/// </summary>

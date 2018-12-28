@@ -17,7 +17,7 @@ namespace Ciderbit.Component
 	/// </summary>
     public static class Component
     {
-		private static Dictionary<string, AppDomain> runningAssemblies { get; set; } = new Dictionary<string, AppDomain>();
+		private static AppDomain runningAssembly { get; set; }
 
 		/// <summary>
 		/// Initialize the environment.
@@ -31,44 +31,36 @@ namespace Ciderbit.Component
 			AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionThrown;
 
 			Conduit.DataReceived += DataReceived;
-			Conduit.ClientConnected += (o, e) =>
-			{
-				Console.WriteLine("#Conduit:\tClient connected.");
-			};
+			Conduit.ClientConnected += (o, e) => Console.WriteLine("#Conduit:\tClient connected.");
 
 			Conduit.Open();
 		}
 
 		private static void DataReceived(object sender, DataReceivedEventArgs e)
 		{
-			Console.WriteLine($"#Conduit:\tReceived { e.Packet.Data.Length } bytes.");
+			Console.WriteLine($"#Conduit:\tReceived { e.Packet.Data?.Length } bytes.");
 
-			string path, name;
 			switch (e.Packet.PacketType)
 			{
 				case ConduitPacketType.Print:
-					Console.WriteLine("#Component:");
-					Console.WriteLine("->\t" + Encoding.Default.GetString(e.Packet.Data));
+					Console.WriteLine("#Component:\n->\t" + Encoding.Default.GetString(e.Packet.Data));
+
 					break;
 				case ConduitPacketType.Execute:
-					path = Encoding.Default.GetString(e.Packet.Data);
-					name = Path.GetFileNameWithoutExtension(path);
+					Console.WriteLine($"#Component:\tExecuting assembly.");
 
-					Console.WriteLine($"#Component:\tExecuting assembly [{name}]");
+					var domain = AppDomain.CreateDomain("ScriptDomain");
 
-					var domain = AppDomain.CreateDomain(name);
-
+					var path = Encoding.Default.GetString(e.Packet.Data);
 					Task.Run(() => domain.ExecuteAssembly(path));
 
-					runningAssemblies[name] = domain;
+					runningAssembly = domain;
+
 					break;
 				case ConduitPacketType.Terminate:
-					name = Path.GetFileNameWithoutExtension(Encoding.Default.GetString(e.Packet.Data));
+					Console.WriteLine($"#Component:\tAborting running assembly.");
 
-					Console.WriteLine($"#Component:\tAborting running assembly [{name}]");
-
-					//if(runningAssemblies.ContainsKey(name))
-						AppDomain.Unload(runningAssemblies[name]);
+					AppDomain.Unload(runningAssembly);
 
 					break;
 			}

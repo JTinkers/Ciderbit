@@ -4,9 +4,9 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Engine.Libraries.Compiler.Types;
+using Engine.Libraries.AssemblyCompiler.Types;
 
-namespace Engine.Libraries.Compiler
+namespace Ciderbit.Engine.Libraries.AssemblyCompiler
 {
 	/// <summary>
 	/// Class with set of functions for compiling C# files and code into assemblies.

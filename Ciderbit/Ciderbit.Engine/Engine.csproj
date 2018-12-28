@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,6 +43,9 @@
     <Reference Include="FontAwesome5.WPF, Version=1.0.8.86, Culture=neutral, PublicKeyToken=9cfaf01297a008f8, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome5.1.0.8\lib\net40\FontAwesome5.WPF.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -58,20 +62,28 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Scripts\PrintSpammer\Core.cs">
+    <None Include="Data\Scripts\TestPrinter\Core.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Engine.cs" />
-    <Compile Include="Libraries\Compiler\Compiler.cs" />
-    <Compile Include="Libraries\Compiler\Types\AssemblyCompilerWithErrorsException.cs" />
+    <Compile Include="Libraries\AssemblyCompiler\Compiler.cs" />
+    <Compile Include="Libraries\AssemblyCompiler\Types\AssemblyCompilerWithErrorsException.cs" />
+    <Compile Include="Libraries\AssemblyCompiler\Types\ScriptInfo.cs" />
+    <Compile Include="Libraries\Core\LineWrittenEventArgs.cs" />
+    <Compile Include="Libraries\Core\ConsoleRedirector.cs" />
+    <Compile Include="Libraries\Core\ProcessUtility.cs" />
     <Compile Include="Libraries\UI\MainFrame.xaml.cs">
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Libraries\UI\Models\AssemblyModel.cs" />
+    <Compile Include="Libraries\UI\Models\ProcessModel.cs" />
     <Compile Include="Libraries\UI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Data\Scripts\PrintSpammer\script.info" />
+    <None Include="Data\Scripts\TestPrinter\script.info">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\Scripts\remove.me">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

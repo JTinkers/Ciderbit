@@ -8,11 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Label.Resources>
         <Style TargetType="{x:Type local:TextButton}">
-            <Setter Property="Foreground" Value="#33312B"/>
+            <Setter Property="Foreground" Value="#22231A"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#B2A06B"/>
-                    <Setter Property="Foreground" Value="#23221E"/>
+                    <Setter Property="Background" Value="#CCCC66"/>
+                    <Setter Property="Foreground" Value="#22231A"/>
                     <Setter Property="Cursor" Value="Hand"/>
                 </Trigger>
             </Style.Triggers>

@@ -1,5 +1,5 @@
 ﻿{
-  "Name":  "Test Printer",
+  "Name":  "TestPrinter",
   "Namespace": "TestPrinter",
   "MainClass": "EntryClass"
 }
