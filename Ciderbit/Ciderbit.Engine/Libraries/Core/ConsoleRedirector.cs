@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Engine.Libraries.Core
 {
+	/// <summary>
+	/// Class used in redirection of console output.
+	/// </summary>
 	public class ConsoleRedirector : TextWriter
 	{
 		public event EventHandler<LineWrittenEventArgs> LineWritten;

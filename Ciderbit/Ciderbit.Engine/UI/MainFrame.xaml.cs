@@ -11,16 +11,15 @@ using System.Windows.Data;
 using System.Windows.Controls;
 using System.IO;
 using Newtonsoft.Json;
+using Ciderbit.Engine.UI.Models;
 using Ciderbit.Engine.Libraries.Core;
-using Ciderbit.Engine.Libraries.UI.Models;
-using Ciderbit.Engine.Libraries.AssemblyCompiler;
-using Ciderbit.Engine.Libraries.AssemblyCompiler.Types;
+using Ciderbit.Engine.Libraries.Compiler;
 using Ciderbit.Common.Libraries.Conduit;
-using Ciderbit.Common.Libraries.Conduit.Types;
+using Ciderbit.Engine.Libraries.Utilities;
 using System.Text;
 using System.Threading;
 
-namespace Ciderbit.Engine.Libraries.UI
+namespace Ciderbit.Engine.UI
 {
 	/// <summary>
 	/// Interaction logic for MainFrame.xaml

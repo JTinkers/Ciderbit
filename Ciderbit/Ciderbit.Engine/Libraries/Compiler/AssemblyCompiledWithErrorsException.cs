@@ -3,7 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Engine.Libraries.AssemblyCompiler.Types
+namespace Engine.Libraries.Compiler
 {
 	/// <summary>
 	/// Exception type thrown when assembly compiled with errors.

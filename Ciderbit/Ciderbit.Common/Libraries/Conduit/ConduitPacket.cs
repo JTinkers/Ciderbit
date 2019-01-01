@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace Ciderbit.Common.Libraries.Conduit.Types
+namespace Ciderbit.Common.Libraries.Conduit
 {
 	/// <summary>
 	/// Enum describing type of the packet.

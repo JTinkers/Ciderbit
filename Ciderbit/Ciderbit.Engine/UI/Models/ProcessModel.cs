@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace Ciderbit.Engine.Libraries.UI.Models
+namespace Ciderbit.Engine.UI.Models
 {
 	public class ProcessModel
 	{

@@ -45,8 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Conduit\Conduit.cs" />
-    <Compile Include="Libraries\Conduit\Types\ConduitPacket.cs" />
-    <Compile Include="Libraries\Conduit\Types\DataReceivedEventArgs.cs" />
+    <Compile Include="Libraries\Conduit\ConduitPacket.cs" />
+    <Compile Include="Libraries\Conduit\DataReceivedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

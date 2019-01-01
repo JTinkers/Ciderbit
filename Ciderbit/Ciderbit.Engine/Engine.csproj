@@ -66,25 +66,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Engine.cs" />
-    <Compile Include="Libraries\AssemblyCompiler\Compiler.cs" />
-    <Compile Include="Libraries\AssemblyCompiler\Types\AssemblyCompilerWithErrorsException.cs" />
-    <Compile Include="Libraries\AssemblyCompiler\Types\ScriptInfo.cs" />
+    <Compile Include="Libraries\Compiler\Compiler.cs" />
+    <Compile Include="Libraries\Compiler\AssemblyCompiledWithErrorsException.cs" />
+    <Compile Include="Libraries\Compiler\ScriptInfo.cs" />
     <Compile Include="Libraries\Core\LineWrittenEventArgs.cs" />
     <Compile Include="Libraries\Core\ConsoleRedirector.cs" />
-    <Compile Include="Libraries\Core\ProcessUtility.cs" />
-    <Compile Include="Libraries\UI\MainFrame.xaml.cs">
+    <Compile Include="Libraries\Utilities\ProcessUtility.cs" />
+    <Compile Include="UI\MainFrame.xaml.cs">
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Libraries\UI\Models\AssemblyModel.cs" />
-    <Compile Include="Libraries\UI\Models\ProcessModel.cs" />
-    <Compile Include="Libraries\UI\TextButton.xaml.cs">
+    <Compile Include="UI\Models\AssemblyModel.cs" />
+    <Compile Include="UI\Models\ProcessModel.cs" />
+    <Compile Include="UI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Data\Scripts\TestPrinter\script.info">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\Scripts\remove.me">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -99,14 +96,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Libraries\UI\MainFrame.xaml">
+    <Page Include="UI\MainFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Libraries\UI\TextButton.xaml">
+    <Page Include="UI\TextButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ciderbit.Common.Libraries.Conduit;
-using Ciderbit.Common.Libraries.Conduit.Types;
 
 namespace Ciderbit.Component
 {

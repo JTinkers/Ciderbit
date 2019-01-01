@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ciderbit.Engine.Libraries.AssemblyCompiler.Types
+namespace Ciderbit.Engine.Libraries.Compiler
 {
 	public class ScriptInfo
 	{
