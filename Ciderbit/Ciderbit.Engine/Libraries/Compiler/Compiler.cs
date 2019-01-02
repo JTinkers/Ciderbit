@@ -8,20 +8,10 @@ using Engine.Libraries.Compiler;
 
 namespace Ciderbit.Engine.Libraries.Compiler
 {
-	/// <summary>
-	/// Class with set of functions for compiling C# files and code into assemblies.
-	/// </summary>
 	public static class Compiler
 	{
 		private static CodeDomProvider CodeProvider { get; set; } = CodeDomProvider.CreateProvider("CSharp");
 
-		/// <summary>
-		/// Create a compiled assembly from files specified by their paths.
-		/// </summary>
-		/// <param name="name">Name of the assembly.</param>
-		/// <param name="paths">Path of files to compile into an assembly.</param>
-		/// <param name="references">Referenced libraries used by the assembly.</param>
-		/// <param name="entryPoint">Class containing static Main entry point.</param>
 		public static void Create(string output, string[] filePaths, string[] references, string entryPoint = null)
 		{
 			foreach (var path in filePaths)
@@ -42,7 +32,7 @@ namespace Ciderbit.Engine.Libraries.Compiler
 			var results = CodeProvider.CompileAssemblyFromFile(parameters, filePaths);
 
 			if (results.Errors.HasErrors)
-				throw new AssemblyCompiledWithErrorsException("Assembly compiled with errors.", results.Errors);
+				throw new ScriptCompiledWithErrorsException("Assembly compiled with errors.", results.Errors);
 		}
 	}
 }

@@ -8,28 +8,16 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Common.Libraries.Conduit
 {
-	/// <summary>
-	/// Class responsible for establishing a local TCP server.
-	/// </summary>
 	public static class ConduitServer
 	{
-		/// <summary>
-		/// Called when client connects to the server succesfully.
-		/// </summary>
 		public static event EventHandler ClientConnected;
 
-		/// <summary>
-		/// Called when data is received from the client.
-		/// </summary>
 		public static event EventHandler<PacketReceivedEventArgs> DataReceived;
 
 		private static TcpListener Server { get; set; }
 
 		private static List<TcpClient> Clients { get; set; }
 
-		/// <summary>
-		/// Open local server for connection.
-		/// </summary>
 		public static void Open()
 		{
 			Server = new TcpListener(IPAddress.Parse("127.0.0.1"), 1964);
@@ -40,9 +28,6 @@ namespace Ciderbit.Common.Libraries.Conduit
 			Listen();
 		}
 
-		/// <summary>
-		/// Close local server and underlying connections.
-		/// </summary>
 		public static void Close()
 		{
 			Clients.ForEach(x => x.Close());

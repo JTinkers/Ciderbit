@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,6 +49,7 @@
     <Compile Include="Libraries\Conduit\Conduit.cs" />
     <Compile Include="Libraries\Conduit\ConduitClient.cs" />
     <Compile Include="Libraries\Conduit\ConduitPacket.cs" />
+    <Compile Include="Libraries\Conduit\ConduitPacketType.cs" />
     <Compile Include="Libraries\Conduit\ConduitServer.cs" />
     <Compile Include="Libraries\Conduit\PacketReceivedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

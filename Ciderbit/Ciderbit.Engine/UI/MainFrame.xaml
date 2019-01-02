@@ -390,7 +390,7 @@
                     <RowDefinition Height="322"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ListBox x:Name="AssemblyListBox" ItemsSource="{Binding Assemblies}" SelectedItem="{Binding SelectedAssembly}" Margin="5,5,10,5" VerticalContentAlignment="Top" ScrollViewer.CanContentScroll="False" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox x:Name="ScriptListBox" ItemsSource="{Binding Scripts}" SelectedItem="{Binding SelectedScript}" Margin="5,5,10,5" VerticalContentAlignment="Top" ScrollViewer.CanContentScroll="False" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Grid.Column="1" Text="{Binding Info.Name}"/>

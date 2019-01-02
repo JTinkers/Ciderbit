@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -67,15 +68,15 @@
     </None>
     <Compile Include="Engine.cs" />
     <Compile Include="Libraries\Compiler\Compiler.cs" />
-    <Compile Include="Libraries\Compiler\AssemblyCompiledWithErrorsException.cs" />
+    <Compile Include="Libraries\Compiler\ScriptCompiledWithErrorsException.cs" />
+    <Compile Include="Libraries\Compiler\Script.cs" />
     <Compile Include="Libraries\Compiler\ScriptInfo.cs" />
-    <Compile Include="Libraries\Core\LineWrittenEventArgs.cs" />
-    <Compile Include="Libraries\Core\ConsoleRedirector.cs" />
+    <Compile Include="Libraries\Utilities\TextWrittenEventArgs.cs" />
+    <Compile Include="Libraries\Utilities\ConsoleRedirector.cs" />
     <Compile Include="Libraries\Utilities\ProcessUtility.cs" />
     <Compile Include="UI\MainFrame.xaml.cs">
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Models\AssemblyModel.cs" />
     <Compile Include="UI\Models\ProcessModel.cs" />
     <Compile Include="UI\TextButton.xaml.cs">
       <DependentUpon>TextButton.xaml</DependentUpon>

@@ -5,20 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ciderbit.Engine.Libraries.Core
+namespace Ciderbit.Engine.Libraries.Utilities
 {
-	/// <summary>
-	/// Class used in redirection of console output.
-	/// </summary>
 	public class ConsoleRedirector : TextWriter
 	{
-		public event EventHandler<LineWrittenEventArgs> LineWritten;
+		public event EventHandler<TextWrittenEventArgs> TextWritten;
 
 		public override void WriteLine(string value)
 		{
 			base.WriteLine();
 
-			LineWritten(null, new LineWrittenEventArgs() { Line = value });
+			TextWritten(null, new TextWrittenEventArgs() { Text = value });
 		}
 
 		public override Encoding Encoding => Encoding.UTF8;

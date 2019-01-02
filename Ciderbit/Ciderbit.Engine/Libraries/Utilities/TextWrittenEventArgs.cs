@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ciderbit.Engine.Libraries.Core
+namespace Ciderbit.Engine.Libraries.Utilities
 {
-	public class LineWrittenEventArgs : EventArgs
+	public class TextWrittenEventArgs : EventArgs
 	{
-		public string Line;
+		public string Text;
 	}
 }

@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Common.Libraries.Conduit
 {
-	/// <summary>
-	/// Class used as a container for common server/client settings.
-	/// </summary>
 	public static class Conduit
 	{
 		public static int BufferSize { get; set; } = 1024;

@@ -8,22 +8,12 @@ using System.Threading.Tasks;
 
 namespace Ciderbit.Common.Libraries.Conduit
 {
-	/// <summary>
-	/// Class responsible for connecting to thge local TCP server, sending and receiving data.
-	/// </summary>
 	public static class ConduitClient
 	{
-		/// <summary>
-		/// Called when data is received from the client.
-		/// </summary>
 		public static event EventHandler<PacketReceivedEventArgs> DataReceived;
 
 		private static TcpClient Client { get; set; }
 
-		/// <summary>
-		/// Connect to the local TCP server.
-		/// </summary>
-		/// <returns>Whether the connection was succesful or not.</returns>
 		public static bool Connect()
 		{
 			Client = new TcpClient();
@@ -48,15 +38,8 @@ namespace Ciderbit.Common.Libraries.Conduit
 			return false;
 		}
 
-		/// <summary>
-		/// Disconnect from the local server.
-		/// </summary>
 		public static void Disconnect() => Client.Close();
 
-		/// <summary>
-		/// Send a data packet through the local network.
-		/// </summary>
-		/// <param name="packet">Packet along with the type and data to pass.</param>
 		public static void Send(ConduitPacket packet)
 		{
 			var data = packet.Serialize().ToList();
