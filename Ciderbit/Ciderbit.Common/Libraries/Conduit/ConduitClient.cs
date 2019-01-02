@@ -18,7 +18,7 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// </summary>
 		public static event EventHandler<PacketReceivedEventArgs> DataReceived;
 
-		private static TcpClient client;
+		private static TcpClient Client { get; set; }
 
 		/// <summary>
 		/// Connect to the local TCP server.
@@ -26,19 +26,19 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// <returns>Whether the connection was succesful or not.</returns>
 		public static bool Connect()
 		{
-			client = new TcpClient();
+			Client = new TcpClient();
 
 			for (int i = 0; i < Conduit.ConnectionRetryCount; i++)
 			{
 				try
 				{
-					client.Connect("127.0.0.1", 1964);
+					Client.Connect("127.0.0.1", 1964);
 				}
 				catch { }
 
 				Thread.Sleep(Conduit.ConnectionRetryCount);
 
-				if (client.Connected)
+				if (Client.Connected)
 				{
 					Listen();
 					return true;
@@ -51,7 +51,7 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// <summary>
 		/// Disconnect from the local server.
 		/// </summary>
-		public static void Disconnect() => client.Close();
+		public static void Disconnect() => Client.Close();
 
 		/// <summary>
 		/// Send a data packet through the local network.
@@ -60,7 +60,7 @@ namespace Ciderbit.Common.Libraries.Conduit
 		public static void Send(ConduitPacket packet)
 		{
 			var data = packet.Serialize().ToList();
-			var stream = client.GetStream();
+			var stream = Client.GetStream();
 
 			for (int i = 0; i < data.Count; i += Conduit.BufferSize)
 			{
@@ -77,15 +77,15 @@ namespace Ciderbit.Common.Libraries.Conduit
 				var data = new List<byte>();
 				byte[] buffer;
 
-				while (client.Connected)
+				while (Client.Connected)
 				{
 					data.Clear();
 
-					while (client.Available > 0)
+					while (Client.Available > 0)
 					{
-						buffer = new byte[Math.Min(Conduit.BufferSize, client.Available)];
+						buffer = new byte[Math.Min(Conduit.BufferSize, Client.Available)];
 
-						client.GetStream().Read(buffer, 0, buffer.Length);
+						Client.GetStream().Read(buffer, 0, buffer.Length);
 
 						data.AddRange(buffer);
 					}

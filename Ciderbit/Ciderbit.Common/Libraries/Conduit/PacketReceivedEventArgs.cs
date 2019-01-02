@@ -10,6 +10,6 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// <summary>
 		/// The sent packet.
 		/// </summary>
-		public ConduitPacket Packet;
+		public ConduitPacket Packet { get; set; }
 	}
 }

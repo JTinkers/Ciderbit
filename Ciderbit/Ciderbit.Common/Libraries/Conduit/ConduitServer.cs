@@ -23,18 +23,19 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// </summary>
 		public static event EventHandler<PacketReceivedEventArgs> DataReceived;
 
-		private static TcpListener server;
-		private static List<TcpClient> clients;
+		private static TcpListener Server { get; set; }
+
+		private static List<TcpClient> Clients { get; set; }
 
 		/// <summary>
 		/// Open local server for connection.
 		/// </summary>
 		public static void Open()
 		{
-			server = new TcpListener(IPAddress.Parse("127.0.0.1"), 1964);
-			server.Start();
+			Server = new TcpListener(IPAddress.Parse("127.0.0.1"), 1964);
+			Server.Start();
 
-			clients = new List<TcpClient>();
+			Clients = new List<TcpClient>();
 
 			Listen();
 		}
@@ -44,18 +45,18 @@ namespace Ciderbit.Common.Libraries.Conduit
 		/// </summary>
 		public static void Close()
 		{
-			clients.ForEach(x => x.Close());
-			server.Stop();
+			Clients.ForEach(x => x.Close());
+			Server.Stop();
 		}
 
 		public static void Send(ConduitPacket packet)
 		{
 			//Remove disconnected clients
-			clients = clients.Where(x => x.Connected).ToList();
+			Clients = Clients.Where(x => x.Connected).ToList();
 
 			var data = packet.Serialize().ToList();
 
-			foreach (var client in clients)
+			foreach (var client in Clients)
 			{
 				var stream = client.GetStream();
 
@@ -77,7 +78,7 @@ namespace Ciderbit.Common.Libraries.Conduit
 
 				while (true)
 				{
-					foreach (var client in clients)
+					foreach (var client in Clients)
 					{
 						data.Clear();
 						if (client.Connected)
@@ -98,10 +99,10 @@ namespace Ciderbit.Common.Libraries.Conduit
 						}
 					}
 
-					if (!server.Pending())
+					if (!Server.Pending())
 						continue;
 
-					clients.Add(server.AcceptTcpClient());
+					Clients.Add(Server.AcceptTcpClient());
 
 					ClientConnected(null, EventArgs.Empty);
 				}

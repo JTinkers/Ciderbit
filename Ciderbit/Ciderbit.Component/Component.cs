@@ -18,7 +18,7 @@ namespace Ciderbit.Component
 	/// </summary>
     public static class Component
     {
-		private static AppDomain runningAssembly { get; set; }
+		private static AppDomain ScriptDomain { get; set; }
 
 		[DllImport("kernel32")]
 		static extern bool AllocConsole();
@@ -63,18 +63,17 @@ namespace Ciderbit.Component
 				case ConduitPacketType.Execute:
 					Console.WriteLine($"#Component:\tExecuting assembly.");
 
-					var domain = AppDomain.CreateDomain("ScriptDomain");
-
 					var path = Encoding.Default.GetString(e.Packet.Data);
-					Task.Run(() => domain.ExecuteAssembly(path));
 
-					runningAssembly = domain;
+					ScriptDomain = AppDomain.CreateDomain("ScriptDomain");
+
+					ScriptDomain.ExecuteAssembly(path);
 
 					break;
 				case ConduitPacketType.Terminate:
 					Console.WriteLine($"#Component:\tAborting running assembly.");
 
-					AppDomain.Unload(runningAssembly);
+					AppDomain.Unload(ScriptDomain);
 
 					break;
 			}

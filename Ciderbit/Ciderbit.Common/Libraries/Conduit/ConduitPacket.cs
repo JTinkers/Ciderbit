@@ -11,7 +11,8 @@ namespace Ciderbit.Common.Libraries.Conduit
 		Print,
 		Execute,
 		Terminate,
-		ProcessSelect
+		ProcessSelect,
+		ScriptFinished
 	}
 
 	/// <summary>

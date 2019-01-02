@@ -13,7 +13,7 @@ namespace Ciderbit.Engine.Libraries.Compiler
 	/// </summary>
 	public static class Compiler
 	{
-		private static CodeDomProvider codeProvider { get; set; } = CodeDomProvider.CreateProvider("CSharp");
+		private static CodeDomProvider CodeProvider { get; set; } = CodeDomProvider.CreateProvider("CSharp");
 
 		/// <summary>
 		/// Create a compiled assembly from files specified by their paths.
@@ -22,8 +22,7 @@ namespace Ciderbit.Engine.Libraries.Compiler
 		/// <param name="paths">Path of files to compile into an assembly.</param>
 		/// <param name="references">Referenced libraries used by the assembly.</param>
 		/// <param name="entryPoint">Class containing static Main entry point.</param>
-		/// <returns></returns>
-		public static Assembly Create(string output, string[] filePaths, string[] references, string entryPoint = null)
+		public static void Create(string output, string[] filePaths, string[] references, string entryPoint = null)
 		{
 			foreach (var path in filePaths)
 			{
@@ -40,12 +39,10 @@ namespace Ciderbit.Engine.Libraries.Compiler
 			parameters.CompilerOptions = "/optimize";
 			parameters.MainClass = entryPoint;
 
-			var results = codeProvider.CompileAssemblyFromFile(parameters, filePaths);
+			var results = CodeProvider.CompileAssemblyFromFile(parameters, filePaths);
 
 			if (results.Errors.HasErrors)
 				throw new AssemblyCompiledWithErrorsException("Assembly compiled with errors.", results.Errors);
-
-			return results.CompiledAssembly;
 		}
 	}
 }
