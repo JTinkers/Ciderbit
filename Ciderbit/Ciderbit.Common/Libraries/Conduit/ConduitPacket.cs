@@ -8,9 +8,10 @@ namespace Ciderbit.Common.Libraries.Conduit
 	/// </summary>
 	public enum ConduitPacketType
 	{
-		Print = 1,
-		Execute = 2,
-		Terminate = 3
+		Print,
+		Execute,
+		Terminate,
+		ProcessSelect
 	}
 
 	/// <summary>

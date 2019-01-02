@@ -26,57 +26,21 @@ namespace Ciderbit.Engine.UI
 	/// </summary>
 	public partial class MainFrame : Window
 	{
-		public static string SearchBoxText { get; set; } = "";
-
 		public static AssemblyModel SelectedAssembly { get; set; }
 
+		public static ProcessModel SelectedProcess { get; set; } = new ProcessModel();
+
 		public static ObservableCollection<AssemblyModel> Assemblies { get; set; } = new ObservableCollection<AssemblyModel>();
-
-		public static ProcessModel SelectedProcess { get; set; }
-
-		private static ObservableCollection<ProcessModel> processes { get; set; } = new ObservableCollection<ProcessModel>();
-
-		public static ICollectionView Processes
-		{
-			get
-			{
-				var view = CollectionViewSource.GetDefaultView(processes);
-
-				if (string.IsNullOrEmpty(SearchBoxText))
-					return view;
-
-				view.Filter = (object model) => ((ProcessModel)model).Process.ProcessName.ToLower().Contains(SearchBoxText.ToLower());
-
-				return view;
-			}
-		}
 
 		public MainFrame()
 		{
 			var consoleWriter = new ConsoleRedirector();
 			consoleWriter.LineWritten += (o, e) =>
 			{
-				ConsoleOutputTextBox.AppendText(e.Line + "\n");
+				ConsoleOutputTextBox.Dispatcher.Invoke(() => ConsoleOutputTextBox.AppendText(e.Line + "\n"));
 			};
 
 			Console.SetOut(consoleWriter);
-
-			//Fill processes
-			foreach (var process in Process.GetProcesses().OrderBy(x => x.ProcessName))
-			{
-				processes.Add(new ProcessModel());
-				processes.Last().Process = process;
-
-				var icon = ProcessUtility.GetProcessIcon(processes.Last().Process);
-
-				if (icon == null)
-					continue;
-
-				var source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, new Int32Rect(0, 0, icon.Width, icon.Height),
-					BitmapSizeOptions.FromEmptyOptions());
-
-				processes.Last().Icon = source;
-			}
 
 			//Fill assemblies
 			foreach(var dir in Directory.GetDirectories(AppContext.BaseDirectory + @"Data\Scripts"))
@@ -92,18 +56,12 @@ namespace Ciderbit.Engine.UI
 
 			InitializeComponent();
 
-			this.DataContext = this;
+			DataContext = this;
 		}
 
-		private void ButtonClose_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			Close();
-		}
+		private void ButtonClose_MouseDown(object sender, MouseButtonEventArgs e) => Close();
 
-		private void ButtonMinimalize_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			WindowState = WindowState.Minimized;
-		}
+		private void ButtonMinimalize_MouseDown(object sender, MouseButtonEventArgs e) => WindowState = WindowState.Minimized;
 
 		private void WindowBar_MouseDown(object sender, MouseButtonEventArgs e)
 		{
@@ -125,14 +83,12 @@ namespace Ciderbit.Engine.UI
 				return;
 			}
 
-			ProcessListBox.IsEnabled = false;
 			AssemblyListBox.IsEnabled = false;
 			ExecuteButton.IsEnabled = false;
 			TerminateButton.IsEnabled = true;
-			ProcessSearchBox.IsEnabled = false;
 			ConnectButton.IsEnabled = false;
 
-			Console.WriteLine($"Compiling: {SelectedAssembly.Path + @"\" + SelectedAssembly.Info.Name + ".cider"}");
+			Console.WriteLine($"Compiling: {SelectedAssembly.Info.Name}.");
 
 			var path = SelectedAssembly.Path + @"\" + SelectedAssembly.Info.Name + ".cider";
 
@@ -141,21 +97,16 @@ namespace Ciderbit.Engine.UI
 				Directory.GetFiles(SelectedAssembly.Path, "*.dll", SearchOption.AllDirectories),
 				SelectedAssembly.Info.Namespace + "." + SelectedAssembly.Info.MainClass);
 
-			Conduit.Send(new ConduitPacket(ConduitPacketType.Execute, Encoding.Default.GetBytes(path)));
-
 			Console.WriteLine($"Sending execution packet.");
-		}
 
-		private void ProcessSearchBox_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			ProcessListBox.ItemsSource = Processes;
+			ConduitClient.Send(new ConduitPacket(ConduitPacketType.Execute, Encoding.Default.GetBytes(path)));
 		}
 
 		private void ConnectButton_Click(object sender, RoutedEventArgs e)
 		{
 			Console.WriteLine("Connecting to the TCP server.");
 
-			if (!Conduit.Connect())
+			if (!ConduitClient.Connect())
 			{
 				Console.WriteLine("Unable to connect to the TCP server.");
 				return;
@@ -163,19 +114,54 @@ namespace Ciderbit.Engine.UI
 
 			Console.WriteLine("Connected successfully.");
 
-			ProcessListBox.IsEnabled = true;
 			AssemblyListBox.IsEnabled = true;
 			ExecuteButton.IsEnabled = true;
 			TerminateButton.IsEnabled = false;
-			ProcessSearchBox.IsEnabled = true;
 			ConnectButton.IsEnabled = false;
+
+			ConduitClient.DataReceived += (o, ev) =>
+			{
+				switch (ev.Packet.PacketType)
+				{
+					case ConduitPacketType.Print:
+						Console.WriteLine(Encoding.Default.GetString(ev.Packet.Data));
+						break;
+					case ConduitPacketType.ProcessSelect:
+						Console.WriteLine("Process selection received.");
+
+						Dispatcher.Invoke(() =>
+						{
+							var pid = Convert.ToInt32(Encoding.Default.GetString(ev.Packet.Data));
+
+							SelectedProcess.Process = Process.GetProcessById(pid);
+
+							var icon = ProcessUtility.GetProcessIcon(SelectedProcess.Process);
+
+							if (icon != null)
+							{
+
+								var source = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, new Int32Rect(0, 0, icon.Width, icon.Height),
+									BitmapSizeOptions.FromEmptyOptions());
+
+								SelectedProcess.Icon = source;
+							}
+							else
+								Console.WriteLine("Icon could not be resolved.");
+
+							SelectedProcessIcon.Source = SelectedProcess.Icon;
+							SelectedProcessName.Content = SelectedProcess.Process.ProcessName;
+						});
+
+						break;
+				}
+			};
 		}
 
 		private void TerminateButton_Click(object sender, RoutedEventArgs e)
 		{
 			Console.WriteLine("Sending termination packet.");
 
-			Conduit.Send(new ConduitPacket(ConduitPacketType.Terminate));
+			ConduitClient.Send(new ConduitPacket(ConduitPacketType.Terminate));
 
 			ExecuteButton.IsEnabled = true;
 			AssemblyListBox.IsEnabled = true;

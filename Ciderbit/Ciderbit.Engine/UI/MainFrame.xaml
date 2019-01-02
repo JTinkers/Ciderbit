@@ -7,6 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500" Title="Ciderbit" Width="600" Height="400" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#FFE5E572" Foreground="#FF232323">
     <Window.Resources>
+        <Style TargetType="{x:Type local:TextButton}">
+            <Setter Property="Foreground" Value="#22231A"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#CCCC66"/>
+                    <Setter Property="Foreground" Value="#22231A"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="{x:Type TextBoxBase}" TargetType="{x:Type TextBoxBase}">
             <Setter Property="Background" Value="#2D2D2D"/>
             <Setter Property="BorderBrush" Value="#383838"/>
@@ -357,38 +367,37 @@
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
-                    <Button x:Name="ConnectButton" Content="Connect" Margin="10,5,0,10" HorizontalAlignment="Left" Grid.Row="1" Click="ConnectButton_Click" Width="66"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="ConnectButton" Content="Connect" Margin="10,5,0,10" HorizontalAlignment="Left" Click="ConnectButton_Click" Width="66"/>
+                        <Grid Grid.Column="1" HorizontalAlignment="Left" MinWidth="10" MinHeight="10" Margin="5,5,5,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="SelectedProcessIcon" Width="16" Height="16"/>
+                            <Label x:Name="SelectedProcessName" Foreground="#FFE5E572" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="130*"/>
-                    <RowDefinition Height="149*"/>
+                    <RowDefinition Height="322"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <ListBox SelectedItem="{Binding SelectedProcess}" x:Name="ProcessListBox" ItemsSource="{Binding Processes}" Margin="5,5,10,5" VerticalContentAlignment="Top" Grid.Row="1" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="False">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="1*"/>
-                                </Grid.ColumnDefinitions>
-                                <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,0,8,0"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Process.ProcessName}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <ListBox x:Name="AssemblyListBox" ItemsSource="{Binding Assemblies}" SelectedItem="{Binding SelectedAssembly}" Margin="5,5,10,5" Grid.Row="2" VerticalContentAlignment="Top" ScrollViewer.CanContentScroll="False" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox x:Name="AssemblyListBox" ItemsSource="{Binding Assemblies}" SelectedItem="{Binding SelectedAssembly}" Margin="5,5,10,5" VerticalContentAlignment="Top" ScrollViewer.CanContentScroll="False" IsEnabled="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Grid.Column="1" Text="{Binding Info.Name}"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="155*"/>
                         <ColumnDefinition Width="163*"/>
@@ -396,7 +405,6 @@
                     <Button x:Name="ExecuteButton" Content="Execute" Margin="5,5,5,10" Click="ExecuteButton_Click" IsEnabled="False"/>
                     <Button x:Name="TerminateButton" Content="Terminate" Grid.Column="1" Margin="5,5,10,10" IsEnabled="False" Click="TerminateButton_Click"/>
                 </Grid>
-                <TextBox Text="{Binding SearchBoxText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" x:Name="ProcessSearchBox" Margin="5,10,10,5" Padding="5" IsUndoEnabled="False" TextChanged="ProcessSearchBox_TextChanged" IsEnabled="False"/>
             </Grid>
         </Grid>
         <Grid x:Name="WindowBar" Background="#FFE5E572" MouseDown="WindowBar_MouseDown">

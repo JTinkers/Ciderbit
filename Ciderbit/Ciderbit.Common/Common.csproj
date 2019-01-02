@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libraries\Conduit\Conduit.cs" />
+    <Compile Include="Libraries\Conduit\ConduitClient.cs" />
     <Compile Include="Libraries\Conduit\ConduitPacket.cs" />
-    <Compile Include="Libraries\Conduit\DataReceivedEventArgs.cs" />
+    <Compile Include="Libraries\Conduit\ConduitServer.cs" />
+    <Compile Include="Libraries\Conduit\PacketReceivedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

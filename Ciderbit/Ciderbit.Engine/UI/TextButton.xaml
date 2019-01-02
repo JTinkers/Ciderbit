@@ -6,16 +6,4 @@
              xmlns:local="clr-namespace:Ciderbit.Engine.UI"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Label.Resources>
-        <Style TargetType="{x:Type local:TextButton}">
-            <Setter Property="Foreground" Value="#22231A"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#CCCC66"/>
-                    <Setter Property="Foreground" Value="#22231A"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-    </Label.Resources>
 </Label>

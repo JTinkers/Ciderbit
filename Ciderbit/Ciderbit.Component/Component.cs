@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,24 +20,37 @@ namespace Ciderbit.Component
     {
 		private static AppDomain runningAssembly { get; set; }
 
+		[DllImport("kernel32")]
+		static extern bool AllocConsole();
+
 		/// <summary>
 		/// Initialize the environment.
 		/// </summary>
 		public static void Initialize()
 		{
+			AllocConsole();
+
 			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.WriteLine("#Component:\tInjected.");
 
 			AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionThrown;
 			AppDomain.CurrentDomain.FirstChanceException += FirstChanceExceptionThrown;
 
-			Conduit.DataReceived += DataReceived;
-			Conduit.ClientConnected += (o, e) => Console.WriteLine("#Conduit:\tClient connected.");
+			ConduitServer.DataReceived += DataReceived;
 
-			Conduit.Open();
+			ConduitServer.ClientConnected += (o, e) =>
+			{
+				Console.WriteLine("#Conduit:\tClient connected.");
+				Console.WriteLine("#Conduit:\tSending data regarding currently selected process.");
+
+				ConduitServer.Send(new ConduitPacket(ConduitPacketType.ProcessSelect, 
+					Encoding.Default.GetBytes($"{Process.GetCurrentProcess().Id}")));
+			};
+
+			ConduitServer.Open();
 		}
 
-		private static void DataReceived(object sender, DataReceivedEventArgs e)
+		private static void DataReceived(object sender, PacketReceivedEventArgs e)
 		{
 			Console.WriteLine($"#Conduit:\tReceived { e.Packet.Data?.Length } bytes.");
 

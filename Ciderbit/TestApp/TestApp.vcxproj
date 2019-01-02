@@ -162,6 +162,17 @@
     </ClCompile>
     <ClCompile Include="TestApp.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ciderbit.Activator\Ciderbit.Activator.vcxproj">
+      <Project>{8e2a4bcd-6428-4c90-a473-52479a1b5b6e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Ciderbit.Common\Common.csproj">
+      <Project>{90b99e0c-7de1-4c5e-b3bd-41ddccd82a51}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Ciderbit.Component\Component.csproj">
+      <Project>{fe9308dc-5458-41b3-9142-208055608493}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
